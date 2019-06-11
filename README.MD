@@ -23,40 +23,40 @@
   
 ## JS Agents
 
-  We can choose between GRPC Web or *Websockets* for js agents, with *protocol buffers* we can avoid json generation, 
+  We can choose between GRPC Web or **Websockets** for js agents, with **protocol buffers**( we can avoid json generation, 
   serializing, parsing.
   
   protocol buffers will give good backward compatibility in case of any schema changes and its binary encoding will 
   reduce the size of request
   
 ## Backend
-  Opinion: While I'm good at Java and Scala, I would like to choose Golang or Rustlang for implementing this
-  for low resource requirement (memory), as we need to scale horizontally with best ROI.  
+  Opinion: *While I'm good at Java and Scala, I would like to choose Golang or Rustlang for implementing this
+  for low resource requirement (memory), as we need to scale horizontally with best ROI.*
 
   GRPC with two streams, will enable us to get requests and responding asynchronously, this will reduce latency
   between clients and servers.
   
-  *GRPC* does not have built it request caching(anyway we don't require in incoming requests), because it http2 with POST, 
+  **GRPC** does not have built it request caching(anyway we don't require in incoming requests), because it http2 with POST, 
   so we will use this for client agents and servers and between internal service to service communication, we will go 
   with micro service architecture.
   
-  *Kubernetes* is with *Istio* service mess will help us in many ways, like 
+  **Kubernetes** is with **Istio** service mess will help us in many ways, like 
     
    * live and canary deployments
    * version based routing
-   * tracing with *zipkin*, *jaeger* or *opentracing*
-   * metric collection by *prometheus*, *grafana*
-   * *service graph*
+   * tracing with **zipkin**, **jaeger** or **opentracing**
+   * metric collection by **prometheus**, **grafana**
+   * **service graph**
    
   Data layer is critical for this kind of workloads, and use cases focused on time series data so we can
-  use columnar databases, as clients will have access to only their data, so we can partition data by merchant id, date.
+  use **columnar databases**, as clients will have access to only their data, so we can **partition data by merchant id, date**.
   
   As we need to support high volume of incoming events and also unexpected spikes, we should push all request from 
-  agents to *Kafka (properly configured no of shards by merchant id and data, with at least replication factor 3)*, on 
-  consumer side we ingest data into cassandra(hotspot/hot nodes should be taken care if we do partition by time).
+  agents to **Kafka (properly configured no of shards by merchant id and data, with at least replication factor 3)**, on 
+  consumer side we ingest data into **cassandra**(hotspot/hot nodes should be taken care if we do partition by time).
   We should separate write heavy tables and read heavy tables to support multi million active users, because we 
   data partition by merchant id and time, cassandra will handle traffic if it properly scaled with optimized replication
-  factor and strategy for multi data center. Spark/Hadoop/Apache Beam can be used for analysis workloads, but spark will 
+  factor and strategy for multi data center. **Spark/Hadoop/Apache Beam** can be used for analysis workloads, but spark will 
   be faster, we can use windowing strategies to work with time series data, data can be aggregated to seconds, minutes, 
   hours from origin events to support for longer time (10+ years of historical data) with better ROI. 
   
@@ -67,7 +67,7 @@
   1 hour, if we have predefined analyzing configuration for each client, we can aggregate upfront and can cache so client 
   can access faster.
   
-  In Kafka we need to use avro with snappy codec for better compression without performance/speed impact.
+  In Kafka we need to use **avro** with **snappy** codec for better compression without performance/speed impact.
   
 ## Basic Features
   * oauth2 authentication
